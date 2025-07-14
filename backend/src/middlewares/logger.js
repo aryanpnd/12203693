@@ -6,7 +6,6 @@ class Logger {
   static async Log(stack, level, packageName, message) {
     try {
       const token = await authService.getToken();
-      console.log(token);
 
       const logData = {
         stack: stack,
