@@ -14,14 +14,15 @@ class Logger {
         message: message
       };
 
-      await axios.post(config.loggingApiUrl, logData, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-      });
+      await axios.post(config.loggingApiUrl, logData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
     } catch (error) {
-      console.error('Logging service failed:', error.message);
+      console.error('Logging service failed:', error);
       console.log(`[${level.toUpperCase()}] [${stack}] [${packageName}] ${message}`);
     }
   }
