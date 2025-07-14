@@ -1,11 +1,10 @@
-// src/config/auth.js
 const axios = require('axios');
 
 const AUTH_URL = "http://20.244.56.144/evaluation-service/auth";
 
 const credentials = {
   email: process.env.LOG_EMAIL,
-  name: process.env.LOG_NAME,
+  name: "Aryan Pandey",
   rollNo: process.env.LOG_ROLLNO,
   accessCode: process.env.LOG_ACCESS_CODE,
   clientID: process.env.LOG_CLIENT_ID,

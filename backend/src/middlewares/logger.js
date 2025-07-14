@@ -6,12 +6,13 @@ class Logger {
   static async Log(stack, level, packageName, message) {
     try {
       const token = await authService.getToken();
+      console.log(token);
 
       const logData = {
-        stack,
-        level,
+        stack: stack,
+        level: level,
         package: packageName,
-        message
+        message: message
       };
 
       await axios.post(config.loggingApiUrl, logData, {
@@ -19,7 +20,6 @@ class Logger {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        timeout: 5000
       });
     } catch (error) {
       console.error('Logging service failed:', error.message);
