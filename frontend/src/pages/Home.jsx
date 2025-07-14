@@ -12,7 +12,6 @@ const Home = () => {
   useEffect(() => {
     Log('frontend', 'info', 'page', 'Home page loaded');
     
-    // Load session URLs from localStorage
     const savedUrls = localStorage.getItem('sessionUrls');
     if (savedUrls) {
       setSessionUrls(JSON.parse(savedUrls));
@@ -40,7 +39,6 @@ const Home = () => {
         
         newResults.push(result);
         
-        // Extract shortcode from shortLink
         const shortcode = response.shortLink.split('/').pop();
         newSessionUrls.push({
           shortcode,
@@ -65,7 +63,6 @@ const Home = () => {
 
     setResults(newResults);
     
-    // Update session URLs
     const updatedSessionUrls = [...sessionUrls, ...newSessionUrls];
     setSessionUrls(updatedSessionUrls);
     localStorage.setItem('sessionUrls', JSON.stringify(updatedSessionUrls));
