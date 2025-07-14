@@ -8,25 +8,25 @@ class Logger {
       const token = await authService.getToken();
 
       const logData = {
-        stack: stack,
-        level: level,
+        stack,
+        level,
         package: packageName,
-        message: message
+        message
       };
 
-      await axios.post(config.loggingApiUrl, logData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+      await axios.post(config.loggingApiUrl, logData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
-      );
+      });
     } catch (error) {
-      console.error('Logging service failed:', error);
+      console.error('Logging service failed:', error.message);
       console.log(`[${level.toUpperCase()}] [${stack}] [${packageName}] ${message}`);
     }
   }
 }
+
 
 const loggingMiddleware = (req, res, next) => {
   const start = Date.now();
