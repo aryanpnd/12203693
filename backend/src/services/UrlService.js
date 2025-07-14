@@ -7,7 +7,6 @@ class UrlService {
     try {
       const { url, validity = config.defaultValidityMinutes, shortcode } = urlData;
 
-      // Check if custom shortcode already exists
       if (shortcode && UrlModel.exists(shortcode)) {
         await Logger.Log('backend', 'warn', 'service', `Shortcode collision: ${shortcode}`);
         throw new Error('Shortcode already exists');
@@ -41,7 +40,6 @@ class UrlService {
         throw new Error('Shortcode not found or expired');
       }
 
-      // Log click
       const clickData = {
         timestamp: new Date().toISOString(),
         referrer: metadata.referrer || 'direct',
