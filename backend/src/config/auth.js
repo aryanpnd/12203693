@@ -1,37 +1,34 @@
+// src/config/auth.js
 const axios = require('axios');
-const config = require('./config');
 
-class AuthService {
-  constructor() {
-    this.token = null;
-    this.tokenExpiry = null;
-  }
+const AUTH_URL = "http://20.244.56.144/evaluation-service/auth";
 
-  async authenticate(credentials) {
+const credentials = {
+  email: process.env.LOG_EMAIL,
+  name: process.env.LOG_NAME,
+  rollNo: process.env.LOG_ROLLNO,
+  accessCode: process.env.LOG_ACCESS_CODE,
+  clientID: process.env.LOG_CLIENT_ID,
+  clientSecret: process.env.LOG_CLIENT_SECRET
+};
+
+let accessToken = null;
+let expiryTime = null;
+
+async function getToken() {
+  const now = new Date();
+  if (!accessToken || (expiryTime && now > expiryTime)) {
     try {
-      const response = await axios.post(config.authApiUrl, credentials);
-      this.token = response.data.token;
-      this.tokenExpiry = new Date(Date.now() + (24 * 60 * 60 * 1000)); // 24 hours
-      return this.token;
+      const response = await axios.post(AUTH_URL, credentials);
+      accessToken = response.data.access_token;
+      expiryTime = new Date(now.getTime() + 60 * 60 * 1000); // 1 hour expiry fallback
+      return accessToken;
     } catch (error) {
-      throw new Error('Authentication failed');
+      console.error("Token fetch failed:", error.message);
+      throw new Error("Failed to authenticate for logging");
     }
   }
-
-  async getToken() {
-    if (!this.token || (this.tokenExpiry && new Date() > this.tokenExpiry)) {
-      const credentials = {
-        email: "your-email@example.com",
-        password: "your-password"
-      };
-      await this.authenticate(credentials);
-    }
-    return this.token;
-  }
-
-  isAuthenticated() {
-    return this.token && (!this.tokenExpiry || new Date() < this.tokenExpiry);
-  }
+  return accessToken;
 }
 
-module.exports = new AuthService();
+module.exports = { getToken };
